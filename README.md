@@ -164,7 +164,7 @@ All messages are JSON:
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `MONGODB_URI` | `mongodb://localhost:27017/ordersdb` | MongoDB connection string |
+| `MONGODB_URI` | `mongodb+srv://srivastavraj344_db_user:OTCgzsgadxgvhjgfDPCFmxBey2lod@cluster0.ahoms1l.mongodb.net/?appName=Cluster0` | MongoDB connection string |
 | `PORT` | `4000` | HTTP + WebSocket port |
 
 ### Client
