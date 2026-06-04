@@ -1,0 +1,33 @@
+version: "3.8"
+
+# Runs a single-node MongoDB replica set (required for Change Streams)
+# Usage: docker-compose up -d
+
+services:
+  mongo:
+    image: mongo:7
+    container_name: ordersdb_mongo
+    ports:
+      - "27017:27017"
+    command: ["mongod", "--replSet", "rs0", "--bind_ip_all"]
+    volumes:
+      - mongo_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping').ok"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # One-shot init container: initialises the replica set
+  mongo-init:
+    image: mongo:7
+    depends_on:
+      mongo:
+        condition: service_healthy
+    restart: "no"
+    entrypoint: >
+      mongosh --host mongo:27017 --eval
+      "rs.initiate({ _id: 'rs0', members: [{ _id: 0, host: 'localhost:27017' }] })"
+
+volumes:
+  mongo_data:
